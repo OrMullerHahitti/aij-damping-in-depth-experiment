@@ -1,6 +1,6 @@
 # Experiments
 
-Source code for the experiments in the paper. All experiments use [PropFlow](https://github.com/or-muller/propflow) (`propflow` package) for belief propagation on factor graphs.
+Source code for the experiments in the paper. All experiments use [PropFlow]([https://github.com/or-muller/propflow](https://github.com/OrMullerHahitti/Belief-Propagation-Simulator)) (`propflow` package) for belief propagation on factor graphs.
 
 ## Setup
 
