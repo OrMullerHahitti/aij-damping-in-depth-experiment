@@ -2,11 +2,11 @@
 
 Prerequisites::
 
-    uv run python expiriments/structured_vs_random/generate_graphs.py
+    uv run python experiments/structured_vs_random/generate_graphs.py
 
 Run::
 
-    uv run python expiriments/structured_vs_random/run_experiment.py
+    uv run python experiments/structured_vs_random/run_experiment.py
 
 Outputs
 -------
@@ -32,7 +32,7 @@ if __package__ in {None, ""}:
 
 from propflow import BPEngine, DampingEngine  # noqa: E402
 from propflow.utils.fg_utils import load_pickle_safely  # noqa: E402
-from expiriments.structured_vs_random._ct_utils import _FixedCostTable  # noqa: E402, F401
+from experiments.structured_vs_random._ct_utils import _FixedCostTable  # noqa: E402, F401
 
 # ── config ────────────────────────────────────────────────────────────────────
 
@@ -47,7 +47,7 @@ ENGINE_CONFIGS = {
     },
 }
 
-MAX_ITER = 200
+MAX_ITER = 2000
 
 
 # ── runner ────────────────────────────────────────────────────────────────────

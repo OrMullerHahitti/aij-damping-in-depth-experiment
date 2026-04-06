@@ -2,7 +2,7 @@
 
 Run::
 
-    uv run python expiriments/structured_vs_random/generate_graphs.py
+    uv run python experiments/structured_vs_random/generate_graphs.py
 
 Outputs
 -------
@@ -26,7 +26,7 @@ if __package__ in {None, ""}:
         sys.path.insert(0, str(repo_root))
 
 from propflow import FGBuilder, FactorAgent, VariableAgent, create_random_int_table  # noqa: E402
-from expiriments.structured_vs_random._ct_utils import _FixedCostTable  # noqa: E402
+from experiments.structured_vs_random._ct_utils import _FixedCostTable  # noqa: E402
 
 # ── constants ─────────────────────────────────────────────────────────────────
 

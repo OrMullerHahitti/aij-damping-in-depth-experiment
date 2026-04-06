@@ -2,16 +2,16 @@
 
 Prerequisites::
 
-    uv run python expiriments/structured_vs_random/run_experiment.py
+    uv run python experiments/structured_vs_random/run_experiment.py
 
 Run::
 
-    uv run python expiriments/structured_vs_random/plot_results.py
+    uv run python experiments/structured_vs_random/plot_results.py
 
 Outputs (in plots/)
 -------------------
-cost_curves_bw.png       — B&W cost curves, filtered to interesting pct_random values
-final_cost_bw.png        — B&W final cost vs pct_random
+cost_curves_bw.pdf       — B&W cost curves, filtered to interesting pct_random values
+final_cost_bw.pdf        — B&W final cost vs pct_random
 """
 
 from __future__ import annotations
@@ -27,6 +27,8 @@ if __package__ in {None, ""}:
     repo_root = Path(__file__).resolve().parents[2]
     if str(repo_root) not in sys.path:
         sys.path.insert(0, str(repo_root))
+
+from experiments.utils.plot_helpers import remove_frame as _remove_frame  # noqa: E402
 
 # ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -69,11 +71,6 @@ _ENGINE_DISPLAY_NAMES = {
 
 def _display_name(engine_name: str) -> str:
     return _ENGINE_DISPLAY_NAMES.get(engine_name, engine_name)
-
-
-def _remove_frame(ax) -> None:
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
 
 
 # ── plot A: B&W cost curves ──────────────────────────────────────────────────
@@ -122,8 +119,8 @@ def plot_cost_curves_bw(df: pd.DataFrame, plots_dir: Path) -> None:
 
     plt.tight_layout()
 
-    out_path = plots_dir / "cost_curves_bw.png"
-    fig.savefig(out_path, dpi=150)
+    out_path = plots_dir / "cost_curves_bw.pdf"
+    fig.savefig(out_path)
     print(f"[plot_results] saved {out_path}")
     plt.close(fig)
 
@@ -167,8 +164,8 @@ def plot_final_cost_bw(df: pd.DataFrame, plots_dir: Path) -> None:
     _remove_frame(ax)
     plt.tight_layout()
 
-    out_path = plots_dir / "final_cost_bw.png"
-    fig.savefig(out_path, dpi=150)
+    out_path = plots_dir / "final_cost_bw.pdf"
+    fig.savefig(out_path)
     print(f"[plot_results] saved {out_path}")
     plt.close(fig)
 
