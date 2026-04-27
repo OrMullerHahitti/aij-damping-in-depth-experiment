@@ -58,8 +58,8 @@ _BW_STYLES = [
 ]
 
 # pct_random values to show in cost curves:
-# low end in jumps (0, 10, 30, 50) + all higher ones that don't converge immediately
-_COST_CURVE_PCT_SHOW = {0, 10, 30, 50, 60, 70, 80, 90, 100}
+# low end in jumps (0, 10, 30, ~50) + all higher ones that don't converge immediately
+_COST_CURVE_PCT_SHOW = {0, 10, 30, 49, 59, 69, 79, 89, 99}
 
 
 # ── plot A: B&W cost curves ──────────────────────────────────────────────────
