@@ -1,64 +1,68 @@
-# Experiments
+# AIJ paper experiments
 
-Source code for the experiments in the paper. All experiments use [PropFlow](https://github.com/OrMullerHahitti/Belief-Propagation-Simulator) (`propflow` package) for belief propagation on factor graphs.
+Three experiments bundled for the AIJ submission. All scripts live flat under `code/`, all outputs flat under `plots/`, all inputs flat under `data/`.
 
-## Setup
+## Three experiments
 
-```bash
-pip install propflow matplotlib pandas numpy
-```
+### 1. Figures 5a, 5b, 8 — belief traces on cycle graphs
 
-## Experiments
+Damped Min-Sum BP (damping=0.9) on binary-domain N-cycle graphs, plotting per-variable belief trajectories.
 
-### 1. Figures 5a, 5b, 8 — Belief Traces on Cycle Graphs
+- **Figure 5a** — consistent assignment, no tail
+- **Figure 5b** — consistent assignment, with tail
+- **Figure 8** — inconsistent assignment, no tail (Theorem 1 demonstration)
 
-Reproduces belief-trace figures from Zivan et al. Runs damped Min-Sum BP (damping=0.9) on binary-domain cycle graphs and plots per-variable belief trajectories over iterations.
-
-- **Figure 5a** — consistent assignment, no tail (period-1 route from iteration 0)
-- **Figure 5b** — consistent assignment, with tail (transient before locking)
-- **Figure 8** — inconsistent assignment, no tail (variables cycle through all domain values)
-
-**Generate all 12 plots (3 figures x 4 cycle sizes):**
+Cycle sizes: 3, 6, 9, 12. Iteration counts: 200 for fig5a/5b, 100 for fig8.
 
 ```bash
-python reproduce_figure.py --batch-bw --n-examples 10
+# replay all 12 plots from saved data — fast
+uv run python experiments/aij/code/reproduce_figure.py --batch-bw --replay
+
+# regenerate the underlying CSV datasets (slow)
+uv run python experiments/aij/code/generate_fig58_csv.py
 ```
 
-**Single figure:**
+Outputs in `plots/`:
+- `figXa_cycleN.pdf` + `figXa_cycleN_cost_tables.json` (24 files for fig5a/5b)
+- `fig8_cycleN.pdf` + `fig8_cycleN_cost_tables.json` (8 files)
+
+### 2. Signal propagation
+
+Measures how a single activated factor's signal reaches a distant observer variable through BP message passing. Compares undamped BP vs damped BP (damping=0.9).
 
 ```bash
-python reproduce_figure.py --figure 5a --cycle-size 3
+uv run python experiments/aij/code/run_signal_propagation.py
+uv run python experiments/aij/code/plot_signal_propagation.py
+uv run python experiments/aij/code/plot_signal_range_analysis.py
 ```
 
-**Generate CSV datasets (50 examples per configuration):**
+Outputs in `plots/`:
+- `factor_graph_comparison.png`, `signal_comparison_bars.png`
+- `scatter_damped.png`, `scatter_undamped.png`, `scatter_side_by_side.png`
+
+### 3. Structured vs random cost tables
+
+Evaluates how replacing structured cost tables with random ones affects BP convergence. 11 graph variants progressively replace 0%–100% of the structured factors with random ones.
 
 ```bash
-python generate_fig58_csv.py
+uv run python experiments/aij/code/generate_structured_vs_random_graphs.py
+uv run python experiments/aij/code/run_structured_vs_random.py
+uv run python experiments/aij/code/plot_structured_vs_random.py
 ```
 
-Output: `generated_csv/{figure_5a,figure_5b,figure_8}/cycle_{3,6,9,12}/` with `examples.csv` (graph metadata) and `traces.csv` (per-iteration beliefs).
+Outputs in `plots/`:
+- `cost_curves_bw_BPEngine.png`, `cost_curves_bw_DampingEngine.png` (one figure per engine, side legend)
+- `final_cost_bw.png`
 
-### 2. Signal Propagation
+## Layout
 
-Measures how a single activated factor's signal reaches a distant observer variable through BP message passing. For each factor in a random graph (20 vars, density 0.25), sets its cost table to ones (all others zero) and records the final Q-message at a fixed observer after 50 iterations. Compares undamped BP vs damped BP (damping=0.9).
-
-```bash
-cd signal_propagation
-python run_experiment.py
-python plot_results.py
+```
+aij/
+├── code/                                 # all scripts + utils/, no propflow
+├── plots/                                # final PDFs / PNGs + JSONs that fed them
+├── data/                                 # examples, traces, results, graph pickles
+├── README.md
+└── FIG58_DATASET_AUDIT.md                # data-provenance notes for fig5/8
 ```
 
-Output: `results/signal_results_combined.csv`, scatter plots in `scatter_distributions/`.
-
-### 3. Structured vs Random Cost Tables
-
-Evaluates how replacing structured cost tables with random ones affects BP convergence. Structured tables have a single zero-cost cell at `[0,0]` (one clear preferred assignment) with all other entries in [100, 200). Random tables have all entries in [100, 200) with no preferred assignment. Generates 11 graph variants from a fixed topology (100 vars, density 0.7), progressively replacing 0%–100% of the structured factors with random ones in 10% steps, then runs both undamped and damped BP for 200 iterations each.
-
-```bash
-cd structured_vs_random
-python generate_graphs.py
-python run_experiment.py
-python plot_results.py
-```
-
-Output: per-graph CSVs in `results/`, cost-curve and final-cost plots in `plots/`.
+See `code/utils/fig58_repro.py` for the BP runner / classifier; `code/utils/plot_helpers.py` for shared plotting helpers.
