@@ -1,4 +1,6 @@
-# AIJ paper experiments
+# paper experiments
+
+The Simulator used to run these experiments can be found here [Propflow](https://github.com/OrMullerHahitti/Belief-Propagation-Simulator) | [PyPI](https://pypi.org/project/propflow/) | [Docs](https://ormullerhahitti.github.io/Belief-Propagation-Simulator/)
 
 Three experiments bundled for the AIJ submission. All scripts live flat under `code/`, all outputs flat under `plots/`, all inputs flat under `data/`.
 
@@ -57,7 +59,7 @@ Outputs in `plots/`:
 ## Layout
 
 ```
-aij/
+src/
 ├── code/                                 # all scripts + utils/, no propflow
 ├── plots/                                # final PDFs / PNGs + JSONs that fed them
 ├── data/                                 # examples, traces, results, graph pickles
